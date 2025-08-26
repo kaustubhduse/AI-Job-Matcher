@@ -5,8 +5,8 @@ FROM python:3.11-slim
 WORKDIR /code
 
 # --- MODIFIED LINE ---
-# Install git AND the missing graphics library for OpenCV
-RUN apt-get update && apt-get install -y git libgl1-mesa-glx
+# Install git and the correct graphics library for OpenCV
+RUN apt-get update && apt-get install -y git libgl1
 
 # Copy only the requirements file first to leverage Docker's cache
 COPY ./requirements.txt /code/requirements.txt
