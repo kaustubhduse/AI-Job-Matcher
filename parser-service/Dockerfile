@@ -5,15 +5,13 @@ FROM python:3.11-slim
 WORKDIR /code
 
 # --- MODIFIED LINE ---
-# Install git and the correct graphics library for OpenCV
+# Install git and a complete set of common libraries needed by OpenCV
 RUN apt-get update && apt-get install -y \
     git \
-    build-essential \
-    libpq-dev \
-    curl \
-    ca-certificates \
     libgl1 \
     libglib2.0-0 \
+    libsm6 \
+    libxext6 \
  && rm -rf /var/lib/apt/lists/*
 
 # Copy only the requirements file first to leverage Docker's cache
