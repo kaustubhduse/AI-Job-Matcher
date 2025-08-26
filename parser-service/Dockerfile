@@ -4,19 +4,19 @@ FROM python:3.11-slim
 # Set the working directory in the container
 WORKDIR /code
 
-# --- NEW STEP: Install git ---
-# First, update the package lists, then install git.
-# The '-y' flag automatically confirms the installation.
+# --- FIX 1: Install git ---
+# The od-parse library is installed from GitHub, so git is required.
 RUN apt-get update && apt-get install -y git
 
-# Copy the requirements file into the container
+# Copy only the requirements file first to leverage Docker's cache
 COPY ./requirements.txt /code/requirements.txt
 
-# Install any needed packages specified in requirements.txt
+# --- FIX 2: Install Python packages with a long timeout ---
+# This helps prevent failures when downloading large files like PyTorch on Render's servers.
 RUN pip install --default-timeout=900 --no-cache-dir --upgrade -r /code/requirements.txt
-# Copy the application code into the container
+
+# Now, copy the rest of your application code
 COPY ./app /code/app
 
-# Command to run the application
-# Uvicorn is an ASGI server, for running FastAPI applications
+# Command to run the application when the container starts
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
