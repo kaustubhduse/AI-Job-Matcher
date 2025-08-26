@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y git libgl1
 COPY ./requirements.txt /code/requirements.txt
 
 # Install the Python dependencies with a long timeout
-RUN pip install --default-timeout=900 --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --default-timeout=1200 --no-cache-dir --upgrade -r /code/requirements.txt
 
 # Now, copy your application's source code into the container
 COPY ./app /code/app
