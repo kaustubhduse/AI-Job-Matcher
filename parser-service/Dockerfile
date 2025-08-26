@@ -6,13 +6,21 @@ WORKDIR /code
 
 # --- MODIFIED LINE ---
 # Install git and the correct graphics library for OpenCV
-RUN apt-get update && apt-get install -y git libgl1
+RUN apt-get update && apt-get install -y \
+    git \
+    build-essential \
+    libpq-dev \
+    curl \
+    ca-certificates \
+    libgl1 \
+    libglib2.0-0 \
+ && rm -rf /var/lib/apt/lists/*
 
 # Copy only the requirements file first to leverage Docker's cache
 COPY ./requirements.txt /code/requirements.txt
 
 # Install the Python dependencies with a long timeout
-RUN pip install --default-timeout=1200 --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install --default-timeout=900 --no-cache-dir --upgrade -r /code/requirements.txt
 
 # Now, copy your application's source code into the container
 COPY ./app /code/app
