@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database Service with pgvector
+  postgres-db:
+    image: pgvector/pgvector:pg16 
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: jobs_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432" 
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # 2. Your Python Parser Service
+  parser-service:
+    build:
+      context: ./parser-service
+      dockerfile: Dockerfile
+    container_name: parser-service
+    ports:
+      - "8000:8000"
+    environment:
+      # It uses the values from the 'postgres-db' service above.
+      DATABASE_URL: "postgresql://postgres:mysecretpassword@postgres-db:5432/jobs_db"
+      PGVECTOR_URL: "postgresql://postgres:mysecretpassword@postgres-db:5432/jobs_db"
+    depends_on:
+      - postgres-db
+
+volumes:
+  postgres_data: # Defines the volume for data persistence

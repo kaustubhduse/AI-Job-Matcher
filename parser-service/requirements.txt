@@ -1,0 +1,19 @@
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Parsing library
+od-parse @ git+https://github.com/octondata/od-parse.git
+
+# AI & Vector embeddings
+sentence-transformers
+pgvector
+torch>=2.0.0 --index-url https://download.pytorch.org/whl/cpu
+torchvision>=0.15.0
+
+# Database connection
+sqlalchemy
+psycopg2-binary
+
+# Utilities
+python-dotenv
